@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,11 +10,13 @@ namespace DeleteBinAndObj;
 public partial class MainWindow
 {
     private string _path = "";
-    private readonly List<string> _binDirectories = new();
-    private readonly List<string> _objDirectories = new();
+    public ObservableCollection<string> BinDirectories { get; } = [];
+    public ObservableCollection<string> ObjDirectories { get; } = [];
+
     public MainWindow()
     {
         InitializeComponent();
+        DataContext = this;
     }
 
     private void Browse_OnClick(object sender, RoutedEventArgs e)
@@ -32,17 +35,14 @@ public partial class MainWindow
         if (string.IsNullOrWhiteSpace(_path)) return;
         var directories = GetAllDirectories(_path);
 
-        _binDirectories.Clear();
-        _objDirectories.Clear();
+        BinDirectories.Clear();
+        ObjDirectories.Clear();
 
-        BinListBox.ItemsSource = null;
-        ObjListBox.ItemsSource = null;
+        foreach (var bin in directories.Where(x => x.EndsWith("bin")))
+            BinDirectories.Add(bin);
 
-        _binDirectories.AddRange(directories.Where(x => x.EndsWith("bin")).ToList());
-        _objDirectories.AddRange(directories.Where(x => x.EndsWith("obj")).ToList());
-
-        BinListBox.ItemsSource = _binDirectories;
-        ObjListBox.ItemsSource = _objDirectories;
+        foreach (var obj in directories.Where(x => x.EndsWith("obj")))
+            ObjDirectories.Add(obj);
     }
 
     private List<string> GetAllDirectories(string parentPath)
@@ -73,18 +73,17 @@ public partial class MainWindow
     {
         if (sender is not Button button) return;
 
-        if (_binDirectories.Count == 0) return;
+        if (BinDirectories.Count == 0) return;
 
         button.IsEnabled = false;
 
-        foreach (var directory in _binDirectories)
+        foreach (var directory in BinDirectories)
         {
             DeleteDirectories(directory);
             Directory.Delete(directory);
         }
 
-        _binDirectories.Clear();
-        BinListBox.ItemsSource = null;
+        BinDirectories.Clear();
 
         button.IsEnabled = true;
     }
@@ -93,18 +92,17 @@ public partial class MainWindow
     {
         if (sender is not Button button) return;
 
-        if (_objDirectories.Count == 0) return;
+        if (ObjDirectories.Count == 0) return;
 
         button.IsEnabled = false;
 
-        foreach (var directory in _objDirectories)
+        foreach (var directory in ObjDirectories)
         {
             DeleteDirectories(directory);
             Directory.Delete(directory);
         }
 
-        _objDirectories.Clear();
-        ObjListBox.ItemsSource = null;
+        ObjDirectories.Clear();
 
         button.IsEnabled = true;
     }

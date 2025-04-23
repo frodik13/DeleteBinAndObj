@@ -4,6 +4,62 @@
              xmlns:local="clr-namespace:DeleteBinAndObj"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <SolidColorBrush x:Key="TextBackgroundBrush" Color="Chocolate"/>
+        <SolidColorBrush x:Key="GridBackground" Color="Teal"/>
+        <SolidColorBrush x:Key="TextForeground" Color="NavajoWhite"/>
+        <SolidColorBrush x:Key="BorderBrush" Color="#00A0A0"/>
+        <LinearGradientBrush x:Key="ButtonBackgroundNormal" EndPoint="0,1" StartPoint="0,0">
+            <GradientStop Color="DarkSlateBlue" Offset="0.0"/>
+            <GradientStop Color="DodgerBlue" Offset="1.0"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="ButtonBackgroundOver" EndPoint="0,2" StartPoint="0,0">
+            <GradientStop Color="DodgerBlue" Offset="0.0"/>
+            <GradientStop Color="DarkSlateBlue" Offset="1.0"/>
+        </LinearGradientBrush>
+
+        <Style TargetType="TextBox">
+             <Setter Property="Background" Value="{StaticResource TextBackgroundBrush}"/>
+             <Setter Property="Height" Value="35"/>
+             <Setter Property="FontSize" Value="18"/>
+         </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextForeground}"/>
+        </Style>
+
+        <Style TargetType="ListBox">
+            <Setter Property="Background" Value="{StaticResource TextBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextForeground}"/>
+        </Style>
+
+        <Style TargetType="Grid">
+            <Setter Property="Background" Value="{StaticResource GridBackground}"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource ButtonBackgroundNormal}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextForeground}"/>
+            <Setter Property="Padding" Value="15 0"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="2"
+                                Height="{TemplateBinding Height}"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{StaticResource ButtonBackgroundNormal}">
+                            <Grid Background="Transparent">
+                                <ContentPresenter x:Name="ContentHost"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  Margin="{TemplateBinding Padding}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>
